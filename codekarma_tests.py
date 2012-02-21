@@ -9,14 +9,25 @@ import codekarma
 import tempfile
 from flask import Flask
 from flaskext.testing import TestCase
+from mock import MagicMock, patch
 
 
 class CodeKarmaTestCase(TestCase):
     def create_app(self):
         codekarma.app.config['TESTING'] = True
         return codekarma.app
-    # testing functions
 
+
+    def setUp(self):
+        self.db_fd, codekarma.app.config['DATABASE'] = tempfile.mkstemp()
+        codekarma.init_db()
+
+
+    def tearDown(self):
+        os.close(self.db_fd)
+        os.unlink(codekarma.app.config['DATABASE'])
+
+    # testing functions
     def test_empty_db(self):
         """Start with a blank database."""
         response = self.client.get('/api/cleanups')
@@ -24,16 +35,15 @@ class CodeKarmaTestCase(TestCase):
         self.assertEquals(response.json, dict())
         
 
+    def test_update_cleanups(self):
+        """Test Cleanups are updated"""
+        with patch('cleanups.Cleanups') as mock:
+            instance = mock.return_value
+            instance.get_cleanups.return_value
+            response = self.client.post('/api/cleanups')
+            instance.get_cleanups.assert_called_once_with()
 
-    def messages(self):
-        """Test that messages work"""
-        rv = self.app.post('/add', data=dict(
-            title='<Hello>',
-            text='<strong>HTML</strong> allowed here'
-        ), follow_redirects=True)
-        assert 'No entries here so far' not in rv.data
-        assert '&lt;Hello&gt;' in rv.data
-        assert '<strong>HTML</strong> allowed here' in rv.data
+        self.assert200(response)
 
 
 if __name__ == '__main__':

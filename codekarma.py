@@ -9,6 +9,7 @@ from sqlite3 import dbapi2 as sqlite3
 from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, jsonify
+import cleanups
 
 # configuration
 DATABASE = '/tmp/codekarma.db'
@@ -55,14 +56,10 @@ def get_cleanups():
     return jsonify()
 
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    g.db.execute('insert into commits (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
-    g.db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))
-
+@app.route('/api/cleanups', methods=['POST'])
+def update_cleanups():
+    c = cleanups.Cleanups().get_cleanups()
+    return "ok"
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0')
