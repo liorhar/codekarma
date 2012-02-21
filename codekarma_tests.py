@@ -6,30 +6,23 @@
 """
 import os
 import codekarma
-import unittest
 import tempfile
+from flask import Flask
+from flaskext.testing import TestCase
 
 
-class CodeKarmaTestCase(unittest.TestCase):
-
-    def setUp(self):
-        """Before each test, set up a blank database"""
-        self.db_fd, codekarma.app.config['DATABASE'] = tempfile.mkstemp()
+class CodeKarmaTestCase(TestCase):
+    def create_app(self):
         codekarma.app.config['TESTING'] = True
-        self.app = codekarma.app.test_client()
-        codekarma.init_db()
-
-    def tearDown(self):
-        """Get rid of the database again after each test."""
-        os.close(self.db_fd)
-        os.unlink(codekarma.app.config['DATABASE'])
-
+        return codekarma.app
     # testing functions
 
     def test_empty_db(self):
         """Start with a blank database."""
-        rv = self.app.get('/')
-        assert 'No entries here so far' in rv.data
+        response = self.client.get('/api/cleanups')
+        print response.data
+        self.assertEquals(response.json, dict())
+        
 
 
     def messages(self):

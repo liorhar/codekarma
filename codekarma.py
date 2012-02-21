@@ -8,7 +8,7 @@ from __future__ import with_statement
 from sqlite3 import dbapi2 as sqlite3
 from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
+     render_template, flash, jsonify
 
 # configuration
 DATABASE = '/tmp/codekarma.db'
@@ -49,11 +49,10 @@ def teardown_request(exception):
         g.db.close()
 
 
-@app.route('/')
-def show_entries():
+@app.route('/api/cleanups')
+def get_cleanups():
     cur = g.db.execute('select author, time, message, score from commits order by id desc')
-    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
-    return render_template('show_entries.html', entries=entries)
+    return jsonify()
 
 
 @app.route('/add', methods=['POST'])
