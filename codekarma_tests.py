@@ -32,7 +32,7 @@ class CodeKarmaTestCase(unittest.TestCase):
         assert 'No entries here so far' in rv.data
 
 
-    def test_messages(self):
+    def messages(self):
         """Test that messages work"""
         rv = self.app.post('/add', data=dict(
             title='<Hello>',
