@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 
-    Tests the codekarma application.
+    Tests the application.
 
 """
 import os
-import codekarma
+from codekarma import app
+import database
 import tempfile
 from flask import Flask
 from flaskext.testing import TestCase
@@ -14,18 +15,18 @@ from mock import MagicMock, patch
 
 class CodeKarmaTestCase(TestCase):
     def create_app(self):
-        codekarma.app.config['TESTING'] = True
-        return codekarma.app
+        app.config['TESTING'] = True
+        return app
 
 
     def setUp(self):
-        self.db_fd, codekarma.app.config['DATABASE'] = tempfile.mkstemp()
-        codekarma.init_db()
+        self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+        database.init_db()
 
 
     def tearDown(self):
         os.close(self.db_fd)
-        os.unlink(codekarma.app.config['DATABASE'])
+        os.unlink(app.config['DATABASE'])
 
     # testing functions
     def test_empty_db(self):
@@ -35,7 +36,7 @@ class CodeKarmaTestCase(TestCase):
         self.assertEquals(response.json, dict())
         
 
-    def test_update_cleanups(self):
+    def XXXt_update_cleanups(self):
         """Test Cleanups are updated"""
         with patch('cleanups.Cleanups') as mock:
             instance = mock.return_value
