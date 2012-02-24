@@ -6,11 +6,9 @@
 """
 from flask import Flask
 from codekarma.database import db_session
-from flaskext.sqlalchemy import SQLAlchemy
-
 
 # configuration
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/codekarma.db'
+DATABASE = '/tmp/codekarma.db'
 DEBUG = True
 SECRET_KEY = 'kenshooooooo123'
 USERNAME = 'admin'
@@ -19,10 +17,6 @@ PASSWORD = 'default'
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
-db = SQLAlchemy(app)
+app.config.from_envvar('CODEKARMA_SETTINGS', silent=True)
 
 import codekarma.views
-
-def init_db():
-    import codekarma.models
-    db.create_all()

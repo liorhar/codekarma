@@ -1,13 +1,13 @@
 from codekarma import app
+from database import db_session
 from models import Cleanup
 from flask import jsonify
-from codekarma import db
 
 
 @app.teardown_request
 def teardown_request(exception):
     """Closes the database again at the end of the request."""
-    db.session.remove()
+    db_session.remove()
 
 
 @app.route('/api/cleanups')
