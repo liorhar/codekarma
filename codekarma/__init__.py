@@ -20,5 +20,3 @@ app.config.from_object(__name__)
 app.config.from_envvar('CODEKARMA_SETTINGS', silent=True)
 
 import codekarma.views
-
-

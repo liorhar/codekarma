@@ -18,11 +18,9 @@ class CodeKarmaTestCase(TestCase):
         app.config['TESTING'] = True
         return app
 
-
     def setUp(self):
         self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
         database.init_db()
-
 
     def tearDown(self):
         os.close(self.db_fd)
@@ -34,7 +32,6 @@ class CodeKarmaTestCase(TestCase):
         response = self.client.get('/api/cleanups')
         print response.data
         self.assertEquals(response.json, dict())
-        
 
     def XXXt_update_cleanups(self):
         """Test Cleanups are updated"""
