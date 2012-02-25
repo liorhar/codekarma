@@ -1,22 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="span10">
-  <table class="table table-striped">
-    <tr>
-      <th>Revision</th>
-      <th>Author</th>
-      <th>Message</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for c in cleanups %}
+<div class="row">
+  <div class="span10">
+    <table class="table table-striped">
+      <tr>
+        <th>Revision</th>
+        <th>Author</th>
+        <th>Message</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in cleanups %}
       <tr>
         <td>{{ c.revision }}</td>
         <td>{{ c.author }}</td>
         <td>{{ c.message|safe }}</td>
+        <td><input type="text" class="input-mini" placeholder="{{ c.score }}"></input></td>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      {% endfor %}
+    </tbody>
+  </div>
 </div>
+
+</table>
 {% endblock %}
