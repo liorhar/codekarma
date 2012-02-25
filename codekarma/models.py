@@ -23,11 +23,9 @@ class Cleanup(Base):
 
 
 def get_latest_cleanups():
-    revision = get_latest_revision()
-    print revision
-    revision += 1
-    return [Cleanup(revision , 'liorh',
-        'stam %s' % revision, revision % 5, datetime.now())]
+    revision = get_latest_revision() + 1
+    return [Cleanup(revision , 'babax',
+        'mess %s' % revision, revision % 5, datetime.now())]
 
 def get_latest_revision():
-    return db_session.query(Cleanup.revision).order_by(Cleanup.revision.desc()).limit(1).one()[0]
+    return db_session.query(func.max(Cleanup.revision)).scalar()
