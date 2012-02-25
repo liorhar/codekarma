@@ -1,7 +1,7 @@
 from codekarma import app
 from database import db_session
 from models import Cleanup, get_latest_cleanups
-from flask import jsonify
+from flask import jsonify, request
 from sqlalchemy import func
 
 
@@ -13,7 +13,13 @@ def teardown_request(exception):
 
 @app.route('/api/cleanups')
 def get_cleanups():
-    cleanups = Cleanup.query.order_by(Cleanup.revision.desc()).limit(20)
+    n = request.args.get('n', 20)
+    author = request.args.get('author', None)
+    if author:
+        cleanups = Cleanup.query.filter(Cleanup.author == author).\
+            order_by(Cleanup.revision.desc()).limit(n)
+    else:
+        cleanups = Cleanup.query.order_by(Cleanup.revision.desc()).limit(n)
     return __jsonify_cleanups(cleanups)
 
 
@@ -30,7 +36,7 @@ def update_cleanups():
 def get_stats():
     stats = db_session.query(Cleanup.author,
         func.sum(Cleanup.score)).group_by(Cleanup.author).all()
-    return jsonify(results = [dict(author=s[1], score=s[0]) for s in stats])
+    return jsonify(results=[dict(author=s[1], score=s[0]) for s in stats])
 
 
 def __jsonify_cleanups(cleanups):
