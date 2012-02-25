@@ -1,7 +1,8 @@
 from codekarma import app
 from database import db_session
 from models import Cleanup, get_latest_cleanups
-from flask import jsonify, request
+from flask import jsonify, request, session, redirect, url_for, abort, \
+     render_template
 from sqlalchemy import func
 
 
@@ -37,6 +38,36 @@ def get_stats():
     stats = db_session.query(Cleanup.author,
         func.sum(Cleanup.score)).group_by(Cleanup.author).all()
     return jsonify(results=[dict(author=s[1], score=s[0]) for s in stats])
+
+
+@app.route('/review')
+def review():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    n = request.args.get('n', 20)
+    cleanups = Cleanup.query.order_by(Cleanup.revision.desc()).limit(n)
+    return render_template('review.html', cleanups=cleanups)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            return redirect(url_for('review'))
+    return render_template('login.html', error=error)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return  "logged out"
 
 
 def __jsonify_cleanups(cleanups):

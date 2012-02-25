@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="span10">
+  <table class="table table-striped">
+    <tr>
+      <th>Revision</th>
+      <th>Author</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in cleanups %}
+      <tr>
+        <td>{{ c.revision }}</td>
+        <td>{{ c.author }}</td>
+        <td>{{ c.message|safe }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
