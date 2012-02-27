@@ -13,6 +13,8 @@ DEBUG = True
 SECRET_KEY = 'kenshooooooo123'
 USERNAME = 'admin'
 PASSWORD = 'default'
+MIN_REVISION = 27355
+
 
 # create our little application :)
 app = Flask(__name__)
