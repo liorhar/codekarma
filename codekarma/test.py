@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
-from codekarma.models import calculate_score
+from codekarma.models import calculate_score, Cleanup
 from nose.tools import eq_
 from unittest import TestCase
-from codekarma.database import db_session
+from codekarma.database import db_session, Base
+from datetime import datetime
 
 
 def test_score_assignment():
@@ -30,10 +31,16 @@ class TestCleanups(TestCase):
         # load some test data, do so here.
 
         # To create tables, you typically do:
-        model.metadata.create_all(engine)
+        Base.metadata.create_all(engine)
 
     def teardown():
         session.remove()
+        Base.metadata.drop_all(engine)
 
-    def test(self):
-        pass
+    def test_stam(self):
+        c = Cleanup(author='liorh', message='xxxx', score=5,
+            revision=1, time=datetime.now())
+        cs = Cleanup.query.all()
+        for c in cs:
+            print c
+
