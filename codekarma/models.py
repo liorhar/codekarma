@@ -25,7 +25,7 @@ class Cleanup(Base):
         return '%s - %s - score: %s' % (self.author, self.time, self.score)
 
 
-scores = map(lambda score: (''.join(score[0].split()), score[1]), 
+scores = map(lambda score: (''.join(score[0].split()), score[1]),
         [("remove commented code", 1),
         ("remove method", 2),
         ("remove class", 5),
@@ -49,10 +49,12 @@ def get_latest_cleanups():
 
 def get_latest_revision():
     latest_revision = db_session.query(func.max(Cleanup.revision)).scalar()
-    return latest_revision if latest_revision is not None else app.config['MIN_REVISION']
+    return latest_revision if latest_revision is not None\
+        else app.config['MIN_REVISION']
 
 
 def log_to_cleanup(log):
     score = calculate_score(log.message)
-    return Cleanup(author = log.author, revision = log.revision.number,
-            message=log.message, time=datetime.fromtimestamp(log.date), score=score)
+    return Cleanup(author=log.author, revision=log.revision.number,
+            message=log.message, time=datetime.fromtimestamp(log.date),
+            score=score)
