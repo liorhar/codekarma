@@ -37,7 +37,7 @@ def update_cleanups():
 def get_stats():
     stats = db_session.query(Cleanup.author,
         func.sum(Cleanup.score)).group_by(Cleanup.author).all()
-    return jsonify(results=[dict(author=s[1], score=s[0]) for s in stats])
+    return jsonify(results=[dict(author=s[0], score=s[1]) for s in stats])
 
 
 @app.route('/review')

@@ -24,8 +24,22 @@ class Cleanup(Base):
     def __repr__(self):
         return '%s - %s - score: %s' % (self.author, self.time, self.score)
 
+
+scores = map(lambda score: (''.join(score[0].split()), score[1]), 
+        [("remove commented code", 1),
+        ("remove method", 2),
+        ("remove class", 5),
+        ("remove warning", 10),
+        ("remove unused process", 15),
+        ("remove unused jsp", 20),
+        ("remove static code analysis warning", 10)])
+
+
 def calculate_score(message):
-    return random.randint(1, 10)
+    stripped_message = ''.join(message.lower().split())
+    matched_scores = [s[1] for s in scores if s[0] in stripped_message]
+    return sum(matched_scores)
+
 
 def get_latest_cleanups():
     revision = get_latest_revision()
