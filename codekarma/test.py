@@ -11,7 +11,9 @@ def test_score_assignment():
         (1, "bla bla [remove commented code]"),
         (1, "xx remove commented   code"),
         (1, "xxx remove COMMENTED CODE bla bla"),
-        (2, "xxx aaa remove method zxcz")]
+        (2, "xxx aaa remove method zxcz"),
+        (3, "xxx aaa\nCleanup: remove method and remove commented code zxcz"),
+        ]
     for score in scores:
         validate_score(score[0], score[1])
 
@@ -43,4 +45,3 @@ class TestCleanups(TestCase):
         cs = Cleanup.query.all()
         for c in cs:
             print c
-
