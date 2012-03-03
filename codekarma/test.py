@@ -8,11 +8,11 @@ from datetime import datetime
 
 def test_score_assignment():
     scores = [(0, "xxxx yyy"),
-        (1, "bla bla [remove commented code]"),
-        (1, "xx remove commented   code"),
-        (1, "xxx remove COMMENTED CODE bla bla"),
-        (2, "xxx aaa remove method zxcz"),
-        (3, "xxx aaa\nCleanup: remove method and remove commented code zxcz"),
+        (1, "bla bla\ncleanup: comments"),
+        (1, "xx Cleanup: comments "),
+        (1, "xxx cleanup - Comments"),
+        (2, "xxx aaa cleanup: method"),
+        (3, "xxx aaa\nCleanup: comments, method"),
         ]
     for score in scores:
         validate_score(score[0], score[1])

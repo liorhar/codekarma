@@ -4,6 +4,7 @@ from codekarma import app
 from datetime import datetime
 from subversion_api import get_revisions
 import random
+import re
 
 
 class Cleanup(Base):
@@ -25,18 +26,19 @@ class Cleanup(Base):
         return '%s - %s - score: %s' % (self.author, self.time, self.score)
 
 
-scores = map(lambda score: (''.join(score[0].split()), score[1]),
-        [("remove commented code", 1),
-        ("remove method", 2),
-        ("remove class", 5),
-        ("remove warning", 10),
-        ("remove unused process", 15),
-        ("remove unused jsp", 20),
-        ("remove static code analysis warning", 10)])
+scores = [("comments", 1),
+        ("method", 2),
+        ("class", 5),
+        ("warning", 10),
+        ("process", 15),
+        ("jsp", 20),
+        ("static code analysis", 10)]
 
 
 def calculate_score(message):
-    stripped_message = ''.join(message.lower().split())
+    cleanup_match = re.match(".*cleanup[\\s:-]+(.*)",
+        message.lower().replace('\n', '').strip())
+    stripped_message = cleanup_match.group(1) if cleanup_match else ""
     matched_scores = [s[1] for s in scores if s[0] in stripped_message]
     return sum(matched_scores)
 
