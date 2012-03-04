@@ -36,8 +36,8 @@ def update_cleanups():
 @app.route('/api/cleanups/stats/')
 def get_stats():
     stats = db_session.query(Cleanup.author,
-        func.sum(Cleanup.score)).group_by(Cleanup.author).all()
-    return jsonify(results=[dict(author=s[0], score=s[1]) for s in stats])
+        func.sum(Cleanup.score), func.count(Cleanup.author)).group_by(Cleanup.author).all()
+    return jsonify(results=[dict(author=s[0], score=s[1], commits=s[2]) for s in stats])
 
 
 @app.route('/review')

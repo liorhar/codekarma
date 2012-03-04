@@ -10,7 +10,6 @@ from codekarma.database import db_session
 # configuration
 DATABASE = '/tmp/codekarma.db'
 DEBUG = True
-SECRET_KEY = 'kenshooooooo123'
 USERNAME = 'admin'
 PASSWORD = 'default'
 MIN_REVISION = 27355
