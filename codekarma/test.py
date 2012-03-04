@@ -10,6 +10,8 @@ def test_score_assignment():
     scores = [(0, "xxxx yyy"),
         (1, "bla bla\ncleanup: comments"),
         (1, "xx Cleanup: comments "),
+        (2, "xx Cleanup: comments, comments "),
+        (1, "xxx cleanup - Comments"),
         (1, "xxx cleanup - Comments"),
         (2, "xxx aaa cleanup: method"),
         (3, "xxx aaa\nCleanup: comments, method"),

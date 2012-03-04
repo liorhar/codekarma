@@ -32,14 +32,17 @@ scores = [("comments", 1),
         ("warning", 10),
         ("process", 15),
         ("jsp", 20),
-        ("static code analysis", 10)]
+        ("static code analysis", 10),
+        ("duplication", 15),
+        ("perl files", 20)
+        ]
 
 
 def calculate_score(message):
     cleanup_match = re.match(".*cleanup[\\s:-]+(.*)",
         message.lower().replace('\n', '').strip())
     stripped_message = cleanup_match.group(1) if cleanup_match else ""
-    matched_scores = [s[1] for s in scores if s[0] in stripped_message]
+    matched_scores = [s[1]*stripped_message.count(s[0]) for s in scores]
     return sum(matched_scores)
 
 
