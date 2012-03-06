@@ -9,6 +9,6 @@ except:
 def get_revisions(since_revision):
     client = Client()
     end_rev = Revision(opt_revision_kind.number,
-            since_revision + 1)
+            since_revision)
     return client.log(app.config["SVN_URL"], Revision(opt_revision_kind.head),
-        end_rev)
+            end_rev)[:-1]
